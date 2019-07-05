@@ -12,7 +12,7 @@ ui <- dashboardPage(
       
     ),
     fluidRow(
-      box(verbatimTextOutput("table2"))
+      box(tableOutput("table1"))
     )
   )
 )
@@ -41,7 +41,7 @@ server <- function(input, output){
                     label = percent(value/nrow(data))), size=5)
     
   })
-  output$table2 <- renderPrint({
+  output$table1 <- renderTable({
     if (is.null(input$plot_click$y)){
       PlantGrowth
     }
@@ -50,7 +50,6 @@ server <- function(input, output){
       keeprows <- subset(PlantGrowth, as.numeric(group) == length(levels(PlantGrowth$group)) - (floor(input$plot_click$y/10))) 
       paste(length(keeprows$group))
       if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
-        paste("Out of Bounds!")
       }else {
         keeprows
       }}
