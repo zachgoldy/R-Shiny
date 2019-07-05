@@ -4,7 +4,7 @@ library(ggplot2)
 library(scales)
 ## UI ------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
-  dashboardHeader(title = "Dril ldown Practice"),
+  dashboardHeader(title = "Drilldown Practice"),
   dashboardSidebar(),
   dashboardBody(
     fluidRow(
