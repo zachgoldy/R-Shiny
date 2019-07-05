@@ -43,16 +43,17 @@ server <- function(input, output){
   })
   output$table1 <- renderPrint({
     if (is.null(input$plot_click$y)){
-      data_table <- data
+      data
     }
     else {
       #we create a subset of the table with a grouping that is equal to the grouping on the barplot
-      keeprows <- subset(data, as.numeric(group) == length(levels(data$group)) - (floor(input$plot_click$y/10))) 
-      if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
+      sub_table <- subset(data, as.numeric(group) == length(levels(data$group)) - (floor(input$plot_click$y/10))) 
+      if (length(sub_table$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
+        data
       }else {
-        data_table <- keeprows
+        sub_table
       }}
-    data_table
+    
   })
   
 }
