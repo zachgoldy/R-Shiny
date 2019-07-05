@@ -2,6 +2,7 @@
 library(shinydashboard)
 library(ggplot2)
 library(scales)
+data <- PlantGrowth #using builtin PlantGrowth dataset, easily replaceable.
 ## UI ------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
   dashboardHeader(title = "Drilldown Practice"),
@@ -19,7 +20,6 @@ ui <- dashboardPage(
 ## SERVER --------------------------------------------------------------------------------------------
 server <- function(input, output){
   output$plot1 <- renderPlot({
-    data <- PlantGrowth
     dfl <- ddply(data, .(group), summarize, y=length(group))
     value <- dfl$y
     pie <- ggplot(dfl, aes(1,y=y, fill= group)) + geom_bar(width = 1, stat="identity") 
@@ -36,18 +36,18 @@ server <- function(input, output){
         axis.text = element_blank()
       )
     
-    pie + scale_fill_brewer("Blues") +  blank_theme +
+    pie + scale_fill_brewer("Types") +  blank_theme +
       geom_text(aes(y = value/3 + c(0, cumsum(value)[-length(value)]), 
                     label = percent(value/nrow(data))), size=5)
     
   })
   output$table1 <- renderTable({
     if (is.null(input$plot_click$y)){
-      PlantGrowth
+      data
     }
     else {
       #we create a subset of the table with a grouping that is equal to the grouping on the barplot
-      keeprows <- subset(PlantGrowth, as.numeric(group) == length(levels(PlantGrowth$group)) - (floor(input$plot_click$y/10))) 
+      keeprows <- subset(data, as.numeric(group) == length(levels(data$group)) - (floor(input$plot_click$y/10))) 
       paste(length(keeprows$group))
       if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
       }else {
