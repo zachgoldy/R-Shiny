@@ -13,7 +13,7 @@ ui <- dashboardPage(
       
     ),
     fluidRow(
-      box(tableOutput("table1"))
+      box(verbatimTextOutput("table1"))
     )
   )
 )
@@ -41,18 +41,18 @@ server <- function(input, output){
                     label = percent(value/nrow(data))), size=5)
     
   })
-  output$table1 <- renderTable({
+  output$table1 <- renderPrint({
     if (is.null(input$plot_click$y)){
-      data
+      data_table <- data
     }
     else {
       #we create a subset of the table with a grouping that is equal to the grouping on the barplot
       keeprows <- subset(data, as.numeric(group) == length(levels(data$group)) - (floor(input$plot_click$y/10))) 
-      paste(length(keeprows$group))
       if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
       }else {
-        keeprows
+        data_table <- keeprows
       }}
+    data_table
   })
   
 }
