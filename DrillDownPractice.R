@@ -1,0 +1,57 @@
+#Drilldown Practice
+library(shinydashboard)
+library(ggplot2)
+library(scales)
+library(DT)
+library()
+ui <- dashboardPage(
+  dashboardHeader(title = "Drilldown Practice"),
+  dashboardSidebar(),
+  dashboardBody(
+    fluidRow(
+      box(plotOutput("plot1", height=500, click="plot_click"))
+      
+    ),
+    fluidRow(
+      box(verbatimTextOutput("table2"))
+    )
+  )
+)
+
+server <- function(input, output){
+  output$plot1 <- renderPlot({
+    data <- PlantGrowth
+    dfl <- ddply(data, .(group), summarize, y=length(group))
+    value <- dfl$y
+    pie <- ggplot(dfl, aes(1,y=y, fill= group)) + geom_bar(width = 1, stat="identity") 
+    blank_theme <- theme_minimal()+
+      theme(
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.title=element_text(size=14, face="bold")
+      )
+    
+    pie + scale_fill_brewer("Blues") +  blank_theme +
+      geom_text(aes(y = value/3 + c(0, cumsum(value)[-length(value)]), 
+                              label = percent(value/nrow(data))), size=5)
+    
+  })
+  
+  output$table2 <- renderPrint({
+    if (is.null(input$plot_click$y)){
+      PlantGrowth
+    }
+    else {
+      keeprows <- subset(PlantGrowth, as.numeric(group) == (floor(input$plot_click$y/10)) + 1) 
+      keeprows
+    }
+  })
+  
+}
+
+shinyApp(ui, server)
