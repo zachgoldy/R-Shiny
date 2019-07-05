@@ -32,12 +32,13 @@ server <- function(input, output){
         axis.ticks = element_blank(),
         axis.ticks.x = element_blank(),
         axis.ticks.y = element_blank(),
-        plot.title=element_text(size=14, face="bold")
+        plot.title=element_text(size=14, face="bold"),
+        axis.text = element_blank()
       )
     
     pie + scale_fill_brewer("Blues") +  blank_theme +
       geom_text(aes(y = value/3 + c(0, cumsum(value)[-length(value)]), 
-                              label = percent(value/nrow(data))), size=5)
+                    label = percent(value/nrow(data))), size=5)
     
   })
   output$table2 <- renderPrint({
@@ -51,8 +52,8 @@ server <- function(input, output){
       if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
         paste("Out of Bounds!")
       }else {
-        paste(input$plot_click$x)
-    }}
+        keeprows
+      }}
   })
   
 }
