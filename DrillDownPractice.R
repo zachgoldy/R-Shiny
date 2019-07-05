@@ -4,8 +4,9 @@ library(ggplot2)
 library(scales)
 library(DT)
 library()
+## UI ------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
-  dashboardHeader(title = "Drilldown Practice"),
+  dashboardHeader(title = "Dril ldown Practice"),
   dashboardSidebar(),
   dashboardBody(
     fluidRow(
@@ -17,7 +18,7 @@ ui <- dashboardPage(
     )
   )
 )
-
+## SERVER --------------------------------------------------------------------------------------------
 server <- function(input, output){
   output$plot1 <- renderPlot({
     data <- PlantGrowth
@@ -41,15 +42,19 @@ server <- function(input, output){
                               label = percent(value/nrow(data))), size=5)
     
   })
-  
   output$table2 <- renderPrint({
     if (is.null(input$plot_click$y)){
       PlantGrowth
     }
     else {
-      keeprows <- subset(PlantGrowth, as.numeric(group) == (floor(input$plot_click$y/10)) + 1) 
-      keeprows
-    }
+      #we create a subset of the table with a grouping that is equal to the grouping on the barplot
+      keeprows <- subset(PlantGrowth, as.numeric(group) == length(levels(PlantGrowth$group)) - (floor(input$plot_click$y/10))) 
+      paste(length(keeprows$group))
+      if (length(keeprows$group) == 0 | input$plot_click$x > 1.5 | input$plot_click$x < 0){
+        paste("Out of Bounds!")
+      }else {
+        paste(input$plot_click$x)
+    }}
   })
   
 }
