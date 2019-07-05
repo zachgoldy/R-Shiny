@@ -2,8 +2,6 @@
 library(shinydashboard)
 library(ggplot2)
 library(scales)
-library(DT)
-library()
 ## UI ------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
   dashboardHeader(title = "Dril ldown Practice"),
