@@ -2,6 +2,7 @@
 library(shinydashboard)
 library(ggplot2)
 library(scales)
+library(plyr)
 data <- PlantGrowth #using builtin PlantGrowth dataset, easily replaceable.
 ## UI ------------------------------------------------------------------------------------------------
 ui <- dashboardPage(
