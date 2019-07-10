@@ -1,4 +1,4 @@
-Hello! This is a readme, for my pie chart generator. 
+Hello! This is a readme for my plotly pie chart generator. 
 
 This was made for a huge file consisting of factor columns and quantitative columns. This will 
 make a pie chart for any choice of factor variables. You just need to input the names of those factors in ui.r (line 18)
